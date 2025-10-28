@@ -6,7 +6,7 @@ import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { Upload, Sparkles } from "lucide-react"
+import { Upload, Sparkles, Download } from "lucide-react"
 
 export function Editor() {
   const [prompt, setPrompt] = useState("")
@@ -115,7 +115,7 @@ export function Editor() {
                     <img
                       src={selectedImage}
                       alt="Uploaded preview"
-                      className="max-h-40 w-auto max-w-full rounded-lg object-contain"
+                      className="max-h-40 w-auto max-w-full rounded-lg object-contain mx-auto"
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
@@ -165,19 +165,37 @@ export function Editor() {
             <p className="text-sm text-muted-foreground mb-4">Your ultra-fast AI creations appear here instantly</p>
 
             {generatedImages.length ? (
-              <div className="grid gap-4 md:grid-cols-2">
-                {generatedImages.map((imageUrl, index) => (
-                  <div
-                    key={`${imageUrl}-${index}`}
-                    className="overflow-hidden rounded-lg border border-border bg-background shadow-sm"
-                  >
-                    <img
-                      src={imageUrl}
-                      alt={`Generated ${index + 1}`}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                ))}
+              <div className="flex justify-center">
+                <div className="grid gap-4 md:grid-cols-2 justify-items-center">
+                  {generatedImages.map((imageUrl, index) => (
+                    <div
+                      key={`${imageUrl}-${index}`}
+                      className="flex max-w-md flex-col items-center gap-3 rounded-lg border border-border bg-background p-4 shadow-sm"
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={`Generated ${index + 1}`}
+                        className="mx-auto max-h-80 w-auto max-w-full object-contain"
+                      />
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="w-full md:w-auto"
+                      >
+                        <a
+                          href={imageUrl}
+                          download={`generated-image-${index + 1}.png`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Download className="h-4 w-4" />
+                          下载图片
+                        </a>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="flex items-center justify-center min-h-80 border-2 border-dashed border-border rounded-lg bg-background/50">
