@@ -1,8 +1,32 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
+import { createSupabaseServerClient } from "@/lib/supabase/server"
+import { HeaderAuthActions } from "@/components/header-auth-actions"
 
-export function Header() {
+async function getSessionUser() {
+  const supabase = await createSupabaseServerClient()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  return session?.user ?? null
+}
+
+function getUserDisplayName(user: Awaited<ReturnType<typeof getSessionUser>>) {
+  if (!user) {
+    return null
+  }
+
+  return (
+    (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
+    user.email ||
+    null
+  )
+}
+
+export async function Header() {
+  const user = await getSessionUser()
+  const displayName = getUserDisplayName(user)
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -30,17 +54,22 @@ export function Header() {
           >
             Reviews
           </a>
-          <a href="#faq" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <a
+            href="#faq"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
             FAQ
           </a>
         </nav>
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm">
-            Sign In
-          </Button>
-          <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-            Launch Now
+          <HeaderAuthActions displayName={displayName} isAuthenticated={Boolean(user)} />
+          <Button
+            size="sm"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            asChild
+          >
+            <a href="#editor">Launch Now</a>
           </Button>
         </div>
       </div>
