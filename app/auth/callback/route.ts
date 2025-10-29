@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   const errorCode = requestUrl.searchParams.get("error")
   const providerParam = requestUrl.searchParams.get("provider")
   const provider =
-    providerParam === "github" || providerParam === "google" ? providerParam : "oauth"
+    providerParam === "google" || providerParam === "github" ? providerParam : "oauth"
 
   const response = NextResponse.redirect(`${origin}${redirectTo}`)
 

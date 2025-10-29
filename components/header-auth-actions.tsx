@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -37,19 +38,23 @@ export function HeaderAuthActions({ displayName, isAuthenticated }: HeaderAuthAc
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" type="button">
           Sign In
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[12rem]">
+      <DropdownMenuContent align="end" className="min-w-[10rem]">
+        <DropdownMenuLabel>Continue with</DropdownMenuLabel>
         <DropdownMenuItem asChild>
-          <Link href="/auth/github">Continue with GitHub</Link>
+          <Link href="/auth/google" className="w-full">
+            Google
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/auth/google">Continue with Google</Link>
+          <Link href="/auth/github" className="w-full">
+            GitHub
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
-

@@ -26,8 +26,9 @@ export async function POST(request: NextRequest) {
     (formData?.get("redirect_to") as string | null | undefined) ??
     requestUrl.searchParams.get("redirect_to")
   const redirectPath = sanitizeRedirect(redirectParam ?? null)
+  const baseRedirectUrl = new URL(redirectPath, origin).toString()
 
-  const response = NextResponse.redirect(new URL(redirectPath, request.url), { status: 303 })
+  const response = NextResponse.redirect(baseRedirectUrl, { status: 303 })
   const supabase = await createSupabaseRouteClient(response)
   const { error } = await supabase.auth.signOut({ scope: "local" })
 

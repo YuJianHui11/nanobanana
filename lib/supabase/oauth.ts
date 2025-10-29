@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 import { createSupabaseRouteClient } from "./server"
 
-type SupportedProvider = "github" | "google"
+type SupportedProvider = "google" | "github"
 
 function sanitizeRedirectPath(path: string | null) {
   if (!path || !path.startsWith("/")) {

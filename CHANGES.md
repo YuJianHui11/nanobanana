@@ -12,9 +12,8 @@
 ## Supabase Social Authentication
 - Installed `@supabase/supabase-js` and `@supabase/ssr` to support server-side session handling (`package.json`).
 - Added Supabase helpers for server components and route handlers to persist auth cookies securely (`lib/supabase/*.ts`).
-- Created reusable OAuth handler plus provider-specific routes for GitHub (`app/auth/github/route.ts`) and Google (`app/auth/google/route.ts`), along with the shared callback/ logout endpoints (`app/auth/callback/route.ts`, `app/auth/logout/route.ts`).
-- Updated the site header with a provider menu and sign-out flow backed by Supabase sessions (`components/header.tsx`, `components/header-auth-actions.tsx`).
-- Supabase OAuth handler supports multiple providers server-side; configure the desired providers in your Supabase dashboard (`lib/supabase/oauth.ts`).
+- Created a reusable OAuth handler and provider-specific routes for Google and GitHub sign-in, alongside shared callback/logout endpoints (`app/auth/google/route.ts`, `app/auth/github/route.ts`, `app/auth/callback/route.ts`, `app/auth/logout/route.ts`).
+- Updated the site header to expose a single “Sign In” trigger with Google and GitHub choices plus Supabase-backed sign-out (`components/header.tsx`, `components/header-auth-actions.tsx`).
 - Configure `.env.local` with `SUPABASE_URL` and `SUPABASE_ANON_KEY` before running locally.
 
 ## Verification
