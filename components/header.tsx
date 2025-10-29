@@ -2,30 +2,31 @@ import { Button } from "@/components/ui/button"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
 import { HeaderAuthActions } from "@/components/header-auth-actions"
 
-async function getSessionUser() {
-  const supabase = await createSupabaseServerClient()
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  return session?.user ?? null
+type SessionContext = {
+  displayName: string | null
+  isAuthenticated: boolean
 }
 
-function getUserDisplayName(user: Awaited<ReturnType<typeof getSessionUser>>) {
-  if (!user) {
-    return null
-  }
+async function getSessionContext(): Promise<SessionContext> {
+  const supabase = await createSupabaseServerClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  return (
-    (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
-    user.email ||
-    null
-  )
+  const displayName = user
+    ? (typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name) ||
+      user.email ||
+      null
+    : null
+
+  return {
+    displayName,
+    isAuthenticated: Boolean(user),
+  }
 }
 
 export async function Header() {
-  const user = await getSessionUser()
-  const displayName = getUserDisplayName(user)
+  const sessionContext = await getSessionContext()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -63,7 +64,10 @@ export async function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <HeaderAuthActions displayName={displayName} isAuthenticated={Boolean(user)} />
+          <HeaderAuthActions
+            displayName={sessionContext.displayName}
+            isAuthenticated={sessionContext.isAuthenticated}
+          />
           <Button
             size="sm"
             className="bg-primary text-primary-foreground hover:bg-primary/90"
